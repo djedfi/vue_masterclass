@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/pages/Home.vue'
 import ThreadShow from  '@/pages/ThreadShow.vue'
+import ThreadCreate from '@/pages/ThreadCreate.vue'
 import NotFound from '@/pages/NotFound.vue'
 import Forum from '@/pages/Forum.vue'
 import CategoryShow from '@/pages/CategoryShow.vue'
@@ -62,6 +63,12 @@ const routes = [
             }
             
         }
+    },
+    {
+        path        : '/form/:forumId/thread/create',
+        name        : 'ThreadCreate',
+        component   : ThreadCreate,
+        props       : true
     },
     { 
         path        : '/category/:id',

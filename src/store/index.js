@@ -40,6 +40,23 @@ export default createStore({
         updateUser({commit},user)
         {
             commit('setUser',{user,userId:user.id})
+        },
+        createThread({ commit,state,dispatch },{ text,title,forumId })
+        {
+            const publishedAt = Math.floor(Date.now()/1000)
+            const userId =  state.authId
+            const id = '999'+Math.random()
+            const thread = {
+                forumId,
+                title,
+                publishedAt,
+                userId,
+                id
+            }
+            commit('setThread',{ thread })
+            commit('appendThreadToUser',{ userId,threadId: id})
+            commit('appendThreadToForum',{ forumId, threadId: id})
+            dispatch('createPost', {text,threadId : id})
         }
     },mutations:{
         setPost (state, { post }){
@@ -50,8 +67,24 @@ export default createStore({
             state.users[userIndex] = user
         },
         appendPostToThread (state, { postId, threadId }){
-            let v_threadId = state.threads.find(thread => thread.id === threadId)
-            v_threadId.posts.push(postId)
+            const thread = state.threads.find(thread => thread.id === threadId)
+            thread.posts = thread.posts || []
+            thread.posts.push(postId)
+        },
+        setThread(state,{ thread })
+        {
+            state.threads.push(thread)
+        },
+        appendThreadToForum(state,{ forumId, threadId }){
+            const forum = state.forums.find(forum => forum.id === forumId)
+            forum.threads = forum.threads || []
+            forum.threads.push(threadId)
+        },
+        appendThreadToUser(state,{ userId, threadId }){
+            const user = state.users.find(user => user.id === userId)
+            user.threads = user.threads || []
+            user.threads.push(threadId)
         }
+
     }
 })
